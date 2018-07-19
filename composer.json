@@ -1,12 +1,12 @@
 {
-    "name": "jacquestvanzuydam/laravel-firebird",
-    "description": "A Firebird database package for the Laravel Framework",
+    "name": "connector/laravel-firebird",
+    "description": "A Firebird database package for the Laravel Framework. In additional that package can create triggers",
     "license": "MIT",
     "version": "1.0.0.0",
     "authors": [
         {
-            "name": "Jacques van Zuydam",
-            "email": "jtvanzuydam@gmail.com"
+            "name": "Yuri Rusanov",
+            "email": "yurirusanov1994@gmail.com"
         }
     ],
     "minimum-stability": "dev",
