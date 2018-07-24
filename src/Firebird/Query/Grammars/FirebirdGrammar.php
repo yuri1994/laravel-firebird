@@ -19,7 +19,7 @@ class FirebirdGrammar extends Grammar
 
     /**
      * Compile SQL statement for get context variable value
-     * 
+     *
      * @param \Illuminate\Database\Query\Builder  $query
      * @param string $namespace
      * @param string $name
@@ -29,10 +29,10 @@ class FirebirdGrammar extends Grammar
     {
         return "SELECT RDB\$GET_CONTEXT('{$namespace}', '{$name}' AS VAL FROM RDB\$DATABASE";
     }
-    
+
     /**
      * Compile SQL statement for execute function
-     * 
+     *
      * @param \Illuminate\Database\Query\Builder  $query
      * @param string $function
      * @param array $values
@@ -41,13 +41,13 @@ class FirebirdGrammar extends Grammar
     public function compileExecFunction(Builder $query, $function, array $values = null)
     {
         $function = $this->wrap($function);
-        
+
         return "SELECT  {$function} (" . $this->parameterize($values) . ") AS VAL FROM RDB\$DATABASE";
-    }    
+    }
 
     /**
      * Compile SQL statement for execute procedure
-     * 
+     *
      * @param \Illuminate\Database\Query\Builder  $query
      * @param string $procedure
      * @param array $values
@@ -56,8 +56,8 @@ class FirebirdGrammar extends Grammar
     public function compileExecProcedure(Builder $query, $procedure, array $values = null)
     {
         $procedure = $this->wrap($procedure);
-        
-        return "EXECUTE PROCEDURE {$$procedure} (" . $this->parameterize($values) . ')';
+
+        return "EXECUTE PROCEDURE {$procedure} (" . $this->parameterize($values) . ')';
     }
 
     /**
@@ -71,7 +71,7 @@ class FirebirdGrammar extends Grammar
     public function compileInsertGetId(Builder $query, $values, $sequence)
     {
         if (is_null($sequence)) {
-            $sequence = 'id';
+            $sequence = 'ID';
         }
 
         return $this->compileInsert($query, $values) . ' RETURNING ' . $this->wrap($sequence);
@@ -112,7 +112,7 @@ class FirebirdGrammar extends Grammar
 
     /**
      * Compile SQL statement for get next sequence value
-     * 
+     *
      * @param \Illuminate\Database\Query\Builder  $query
      * @param string $sequence
      * @param int $increment
@@ -216,7 +216,7 @@ class FirebirdGrammar extends Grammar
      */
     protected function dateBasedWhere($type, Builder $query, $where)
     {
-        $value = $this->parameter($where['value']);
+        $value = $this->parameter($where['VALUE']);
 
         return 'EXTRACT(' . $type . ' FROM ' . $this->wrap($where['column']) . ') ' . $where['operator'] . ' ' . $value;
     }
@@ -233,7 +233,7 @@ class FirebirdGrammar extends Grammar
             return $value;
         }
 
-        return strtoupper('"' . str_replace('"', '""', $value) . '"');
+        return ('' . str_replace('"', '""', $value) . '');
     }
 
 }

@@ -24,22 +24,22 @@ class SequenceBlueprint
 
     /**
      * Initial sequence value
-     * 
-     * @var int 
+     *
+     * @var int
      */
     protected $start_with = 0;
 
     /**
      * Increment for sequence
-     * 
-     * @var int 
+     *
+     * @var int
      */
     protected $increment = 1;
 
     /**
      * Restart flag that indicates that the sequence should be reset
-     * 
-     * @var bool 
+     *
+     * @var bool
      */
     protected $restart = false;
 
@@ -176,7 +176,7 @@ class SequenceBlueprint
 
     /**
      * Get increment for the sequence
-     * 
+     *
      * @return int
      */
     public function getIncrement()
@@ -186,7 +186,7 @@ class SequenceBlueprint
 
     /**
      * Get initial value for the sequence
-     * 
+     *
      * @return int
      */
     public function getInitialValue()
@@ -206,7 +206,7 @@ class SequenceBlueprint
 
     /**
      * Set the sequence increment
-     * 
+     *
      * @param int $increment
      */
     public function increment($increment)
@@ -216,7 +216,7 @@ class SequenceBlueprint
 
     /**
      * Get the sequence restart flag
-     * 
+     *
      * @return bool
      */
     public function isRestart()
@@ -226,7 +226,7 @@ class SequenceBlueprint
 
     /**
      * Set initial value for the sequence
-     * 
+     *
      * @param int $startWith
      */
     public function startWith($startWith)
@@ -236,7 +236,7 @@ class SequenceBlueprint
 
     /**
      * Restart sequence and set initial value
-     * 
+     *
      * @param int $startWith
      */
     public function restart($startWith = null)
@@ -253,8 +253,8 @@ class SequenceBlueprint
     protected function addImpliedCommands()
     {
         if (($this->restart || ($this->increment !== 1)) &&
-                !$this->creating() &&
-                !$this->dropping()) {
+            !$this->creating() &&
+            !$this->dropping()) {
             array_unshift($this->commands, $this->createCommand('alterSequence'));
         }
     }

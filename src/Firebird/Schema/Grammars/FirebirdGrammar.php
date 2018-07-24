@@ -41,7 +41,7 @@ class FirebirdGrammar extends Grammar
     public function compileColumnExists($table)
     {
         return 'SELECT TRIM(RDB$FIELD_NAME) AS "column_name" '
-                . "FROM RDB\$RELATION_FIELDS WHERE RDB\$RELATION_NAME = '$table'";
+        . "FROM RDB\$RELATION_FIELDS WHERE RDB\$RELATION_NAME = '$table'";
     }
 
     /**
@@ -67,7 +67,8 @@ class FirebirdGrammar extends Grammar
 
         $sql = $blueprint->temporary ? 'CREATE TEMPORARY' : 'CREATE';
 
-        $sql .= ' TABLE ' . $this->wrapTable($blueprint) . " ($columns)";
+        //$sql .= ' TABLE ' . $this->wrapTable($blueprint) . " ($columns)";
+        $sql .= ' TABLE ' . $blueprint->getTable() . " ($columns)";
 
         if ($blueprint->temporary) {
             if ($blueprint->preserve) {
@@ -80,6 +81,22 @@ class FirebirdGrammar extends Grammar
         return $sql;
     }
 
+    protected function getColumns(Blueprint $blueprint)
+    {
+        $columns = [];
+
+        foreach ($blueprint->getAddedColumns() as $column) {
+            // Each of the column types have their own compiler functions which are tasked
+            // with turning the column definition into its SQL format for this platform
+            // used by the connection. The column's modifiers are compiled and added.
+            $sql = $column->name.' '.$this->getType($column);
+
+            $columns[] = $this->addModifiers($sql, $blueprint, $column);
+        }
+
+        return $columns;
+    }
+
     /**
      * Compile a drop table command.
      *
@@ -89,7 +106,8 @@ class FirebirdGrammar extends Grammar
      */
     public function compileDrop(Blueprint $blueprint, Fluent $command)
     {
-        return 'DROP TABLE ' . $this->wrapTable($blueprint);
+        //return 'DROP TABLE ' . $this->wrapTable($blueprint);
+        return 'DROP TABLE ' . $blueprint->getTable();
     }
 
     /**
@@ -105,7 +123,9 @@ class FirebirdGrammar extends Grammar
 
         $columns = $this->prefixArray('ADD', $this->getColumns($blueprint));
 
-        return 'ALTER TABLE ' . $table . ' ' . implode(', ', $columns);
+
+        //return 'ALTER TABLE ' . $table . ' ' . implode(', ', $columns);
+        return 'ALTER TABLE ' . $blueprint->getTable() . ' ' . implode(', ', $columns);
     }
 
     /**
@@ -119,7 +139,8 @@ class FirebirdGrammar extends Grammar
     {
         $columns = $this->columnize($command->columns);
 
-        return 'ALTER TABLE ' . $this->wrapTable($blueprint) . " ADD PRIMARY KEY ({$columns})";
+        //return 'ALTER TABLE ' . $this->wrapTable($blueprint) . " ADD PRIMARY KEY ({$columns})";
+        return 'ALTER TABLE ' . $blueprint->getTable() . " ADD PRIMARY KEY ({$columns})";
     }
 
     /**
@@ -131,7 +152,8 @@ class FirebirdGrammar extends Grammar
      */
     public function compileUnique(Blueprint $blueprint, Fluent $command)
     {
-        $table = $this->wrapTable($blueprint);
+        //$table = $this->wrapTable($blueprint);
+        $table = $blueprint->getTable();
 
         $index = $this->wrap(substr($command->index, 0, 31));
 
@@ -153,7 +175,8 @@ class FirebirdGrammar extends Grammar
 
         $index = $this->wrap(substr($command->index, 0, 31));
 
-        $table = $this->wrapTable($blueprint);
+        //$table = $this->wrapTable($blueprint);
+        $table = $blueprint->getTable();
 
         return "CREATE INDEX {$index} ON {$table} ($columns)";
     }
@@ -167,9 +190,11 @@ class FirebirdGrammar extends Grammar
      */
     public function compileForeign(Blueprint $blueprint, Fluent $command)
     {
-        $table = $this->wrapTable($blueprint);
+        //$table = $this->wrapTable($blueprint);
+        $table = $blueprint->getTable();
 
-        $on = $this->wrapTable($command->on);
+        //$on = $this->wrapTable($command->on);
+        $on = $command->on;
 
         // We need to prepare several of the elements of the foreign key definition
         // before we can create the SQL, such as wrapping the tables and convert
@@ -207,7 +232,8 @@ class FirebirdGrammar extends Grammar
      */
     public function compileDropForeign(Blueprint $blueprint, Fluent $command)
     {
-        $table = $this->wrapTable($blueprint);
+        //$table = $this->wrapTable($blueprint);
+        $table = $blueprint->getTable();
 
         return "ALTER TABLE {$table} DROP CONSTRAINT {$command->index}";
     }
@@ -643,7 +669,7 @@ class FirebirdGrammar extends Grammar
 
     /**
      * Compile a drop sequence command for table.
-     * 
+     *
      * @param \Illuminate\Database\Schema\SequenceBlueprint $blueprint
      * @param \Illuminate\Support\Fluent $command
      * @return string
@@ -671,7 +697,8 @@ class FirebirdGrammar extends Grammar
      */
     public function compileTriggerForAutoincrement(Blueprint $blueprint, Fluent $command)
     {
-        $table = $this->wrapTable($blueprint);
+        //$table = $this->wrapTable($blueprint);
+        $table = $blueprint->getTable();
         $trigger = $this->wrap(substr('tr_' . $blueprint->getTable() . '_bi', 0, 31));
         $column = $this->wrap($command->columnname);
         $sequence = $this->wrap(substr('seq_' . $blueprint->getTable(), 0, 31));
@@ -685,6 +712,11 @@ class FirebirdGrammar extends Grammar
         $sql .= 'END';
 
         return $sql;
+    }
+
+    public function wrap($value, $prefixAlias = false)
+    {
+        return $value;
     }
 
     /**
@@ -712,7 +744,7 @@ class FirebirdGrammar extends Grammar
 
     /**
      * Compile a drop sequence command.
-     * 
+     *
      * @param \Illuminate\Database\Schema\SequenceBlueprint $blueprint
      * @param \Illuminate\Support\Fluent $command
      * @return string
@@ -724,7 +756,7 @@ class FirebirdGrammar extends Grammar
 
     /**
      * Compile a drop sequence command.
-     * 
+     *
      * @param \Illuminate\Database\Schema\SequenceBlueprint $blueprint
      * @param \Illuminate\Support\Fluent $command
      * @return string
@@ -748,6 +780,8 @@ class FirebirdGrammar extends Grammar
      */
     public function wrapSequence($sequence)
     {
+
+        /*
         if ($sequence instanceof SequenceBlueprint) {
             $sequence = $sequence->getSequence();
         }
@@ -757,6 +791,9 @@ class FirebirdGrammar extends Grammar
         }
 
         return $this->wrap($this->tablePrefix . $sequence, true);
+        
+        */
+        $this->tablePrefix . $sequence;
     }
 
 }

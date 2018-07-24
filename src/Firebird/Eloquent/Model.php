@@ -15,7 +15,7 @@ class Model extends BaseModel
 
     /**
      * Get sequence name
-     * 
+     *
      * @return string
      */
     protected function getSequence()
@@ -28,7 +28,7 @@ class Model extends BaseModel
      * Get next sequence value
      *
      * @param  string $sequence
-     * 
+     *
      * @return int
      */
     protected function nextSequenceValue($sequence = null)

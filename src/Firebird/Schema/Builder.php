@@ -39,7 +39,7 @@ class Builder extends BaseBuilder
 
     /**
      * Create a new sequence on the schema
-     * 
+     *
      * @param string $sequence
      * @param \Closure $callback
      * @return \Firebird\Schema\SequenceBlueprint
@@ -59,7 +59,7 @@ class Builder extends BaseBuilder
 
     /**
      * Drop a sequence from the schema.
-     * 
+     *
      * @param string $sequence
      * @param \Closure $callback
      */

@@ -19,8 +19,8 @@ class FirebirdProcessor extends Processor
     {
         $results = $query->getConnection()->selectFromWriteConnection($sql, $values);
 
-        $sequence = $sequence ?: 'id';
-
+        //$sequence = $sequence ?: 'ID';
+        $sequence = 'ID';
         $result = (array) $results[0];
 
         $id = $result[$sequence];
@@ -66,7 +66,7 @@ class FirebirdProcessor extends Processor
      * @param  \Illuminate\Database\Query\Builder  $query
      * @param  string  $sql
      * @param  array   $values
-     * 
+     *
      * @return mixed
      */
     public function processExecuteFunction(Builder $query, $sql, $values)

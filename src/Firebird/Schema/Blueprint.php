@@ -9,28 +9,28 @@ class Blueprint extends BaseBlueprint
 
     /**
      * Whether a temporary table such as ON COMMIT PRESERVE ROWS
-     * 
-     * @var bool 
+     *
+     * @var bool
      */
     public $preserve = false;
 
     /**
      * Use identity modifier for increment columns
-     * 
-     * @var bool 
+     *
+     * @var bool
      */
     public $use_identity = false;
 
     /**
      * Use native boolean type
-     * 
-     * @var bool 
+     *
+     * @var bool
      */
     public $use_native_boolean = false;
 
     /**
      * Indicate that the temporary table as ON COMMIT PRESERVE ROWS.
-     * 
+     *
      * @return void
      */
     public function preserveRows()
@@ -40,7 +40,7 @@ class Blueprint extends BaseBlueprint
 
     /**
      * Indicate that it is necessary to use a identity modifier for increment columns
-     * 
+     *
      * @return void
      */
     public function useIdentity()
@@ -50,9 +50,9 @@ class Blueprint extends BaseBlueprint
 
     /**
      * Indicate that it is necessary to use native boolean type
-     * Reserved for future versions. Now Firebird PDO driver 
+     * Reserved for future versions. Now Firebird PDO driver
      * does not support the type BOOLEAN
-     * 
+     *
      * @return void
      */
     public function nativeBoolean()
@@ -97,7 +97,7 @@ class Blueprint extends BaseBlueprint
 
     /**
      * Add the command for create sequence for table
-     * 
+     *
      * @return void
      */
     protected function addSequence()
@@ -112,7 +112,7 @@ class Blueprint extends BaseBlueprint
 
     /**
      * Add the command for drop sequence for table
-     * 
+     *
      * @return void
      */
     protected function dropSequence()
@@ -122,7 +122,7 @@ class Blueprint extends BaseBlueprint
 
     /**
      * Add the command for create trigger
-     * 
+     *
      * @return void
      */
     protected function addAutoIncrementTrigger()
