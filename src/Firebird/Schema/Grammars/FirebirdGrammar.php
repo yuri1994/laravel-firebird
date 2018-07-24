@@ -435,7 +435,7 @@ class FirebirdGrammar extends Grammar
         // Firebird 3.0 support native type BOOLEAN, but
         // PDO dosn't support
 //        return 'CHAR(1)';
-        return 'BOOLEAN';
+        return 'SMALLINT';
     }
 
     /**
