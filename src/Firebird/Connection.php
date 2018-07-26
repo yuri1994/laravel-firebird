@@ -1,5 +1,6 @@
 <?php namespace Firebird;
 
+use IST\DoctrineFirebirdDriver\Driver\FirebirdInterbase\Driver;
 use PDO;
 use Firebird\Schema\Grammars\FirebirdGrammar as SchemaGrammar;
 
@@ -127,7 +128,8 @@ class Connection extends \Illuminate\Database\Connection {
     {
         if (is_null($this->schemaGrammar)) { $this->useDefaultSchemaGrammar(); }
 
-        return new Schema\Builder($this);
+        //return new Schema\Builder($this);
+        return new FBBuilder($this);
     }
 
     /**
