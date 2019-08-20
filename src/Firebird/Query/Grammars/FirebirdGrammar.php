@@ -233,7 +233,7 @@ class FirebirdGrammar extends Grammar
             return $value;
         }
 
-        return strtoupper('' . str_replace('"', '""', $value) . '');
+        return strtoupper('' . str_replace('"', '"', $value) . '');
     }
 
 }
